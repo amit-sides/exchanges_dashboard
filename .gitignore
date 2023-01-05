@@ -131,6 +131,6 @@ dmypy.json
 .pyre/
 
 /data
-*.json
+**/config.json
 
 *.db.trace.db
