@@ -134,3 +134,5 @@ dmypy.json
 **/config.json
 
 *.db.trace.db
+
+.idea
