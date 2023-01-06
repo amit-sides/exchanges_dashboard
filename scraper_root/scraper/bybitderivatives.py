@@ -25,7 +25,7 @@ class BybitDerivatives:
 #            api_key=self.api_key, api_secret=self.secret)
         #bybit connection
         api_link = "https://api.bybit.com"
-        if self.config.test_net:
+        if self.account.test_net:
             api_link = "https://api-testnet.bybit.com"
         self.rest_manager2 = HTTP(api_link, api_key=self.api_key, api_secret=self.secret)
 
