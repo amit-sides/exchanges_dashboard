@@ -1,3 +1,3 @@
 [Desktop Entry]
 Name=ExchangesDashboard
-Exec=/usr/bin/bash /home/raspberry/Desktop/exchanges_dashboard/autostart.sh
+Exec=/usr/bin/bash /repos/exchanges_dashboard/autostart.sh
