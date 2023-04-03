@@ -32,9 +32,9 @@ class Repository:
 
     def update_daily_balance(self, accounts: List[str]):
         while True:
-            for account in accounts:
+            with self.lockable_session as session:
                 try:
-                    with self.lockable_session as session:
+                    for account in accounts:
                         session.query(DailyBalanceEntity).filter(DailyBalanceEntity.account == account).delete()
                         session.commit()
                         result = session.query(BalanceEntity.totalWalletBalance) \
@@ -43,32 +43,32 @@ class Repository:
                         if result is not None:
                             current_balance = result[0]
 
-                    daily_balances = []
-                    with self.engine.connect() as con:
-                        oldest_income = self.get_oldest_income(account=account)
-                        if oldest_income is not None:
-                            day = oldest_income.time.date()
-                            end_date = date.today()
-                            while day <= end_date:
-                                rs = con.execute(
-                                    f'SELECT sum("INCOME"."income") AS "sum" FROM "INCOME" '
-                                    f'WHERE "INCOME"."time" >= date(\'{day.strftime("%Y-%m-%d")}\') '
-                                    f'AND "Income"."account" = \'{account}\'')
-                                for row in rs:
-                                    if row[0] is None:
-                                        continue
-                                    income = float(row[0])
-                                    daily_balance = DailyBalanceEntity()
-                                    daily_balance.day = day
-                                    daily_balance.totalWalletBalance = current_balance - income
-                                    daily_balance.account = account
-                                    daily_balances.append(daily_balance)
+                        daily_balances = []
+                        with self.engine.connect() as con:
+                            oldest_income = self.get_oldest_income(account=account)
+                            if oldest_income is not None:
+                                day = oldest_income.time.date()
+                                end_date = date.today()
+                                while day <= end_date:
+                                    rs = con.execute(
+                                        f'SELECT sum("INCOME"."income") AS "sum" FROM "INCOME" '
+                                        f'WHERE "INCOME"."time" >= date(\'{day.strftime("%Y-%m-%d")}\') '
+                                        f'AND "Income"."account" = \'{account}\'')
+                                    for row in rs:
+                                        if row[0] is None:
+                                            continue
+                                        income = float(row[0])
+                                        daily_balance = DailyBalanceEntity()
+                                        daily_balance.day = day
+                                        daily_balance.totalWalletBalance = current_balance - income
+                                        daily_balance.account = account
+                                        daily_balances.append(daily_balance)
 
-                                day += timedelta(days=1)
+                                    day += timedelta(days=1)
 
-                    with self.lockable_session as session:
                         [session.add(balance) for balance in daily_balances]
-                        session.commit()
+                    session.commit()
+                    logger.info('Updated daily balances')
                 except Exception as e:
                     logger.error(f'Failed to update daily balance: {e}')
 
