@@ -3,6 +3,7 @@ import os
 import time
 from types import SimpleNamespace
 from typing import List
+from dateutil import parser
 
 import hjson
 from scraper.binancefutures import BinanceFutures
@@ -46,7 +47,8 @@ if __name__ == '__main__':
         elif account.exchange == 'binance_spot':
             scraper = BinanceSpot(account=account, symbols=scraper_config.symbols, repository=repository)
         elif account.exchange == 'bybit_derivatives':
-            scraper = BybitDerivatives(account=account, symbols=scraper_config.symbols, repository=repository)
+            starting_from = parser.parse(account.start_date) if account.start_date != "" else None
+            scraper = BybitDerivatives(account=account, symbols=scraper_config.symbols, repository=repository, starting_from=starting_from)
         elif account.exchange == 'bitget_futures':
             scraper = BitgetFutures(account=account, symbols=scraper_config.symbols, repository=repository)
         else:

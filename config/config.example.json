@@ -15,7 +15,8 @@
       "exchange": "bybit_derivatives",
       "test_net": false,
       "api_key": "",
-      "api_secret": ""
+      "api_secret": "",
+      "start_date": "2022-01-01"
     },
     {
       "alias": "demo_bitget",

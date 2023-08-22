@@ -15,8 +15,9 @@ logger = logging.getLogger()
 
 
 class BybitDerivatives:
-    def __init__(self, account: Account, symbols: List[str], repository: Repository, exchange: str = "bybit"):
+    def __init__(self, account: Account, symbols: List[str], repository: Repository, starting_from: datetime = None, exchange: str = "bybit"):
         logger.info(f"Bybit initializing")
+        self.starting_from = starting_from
         self.account = account
         self.alias = self.account.alias
         self.symbols = symbols
@@ -35,7 +36,7 @@ class BybitDerivatives:
         test = self.rest_manager2.api_key_info()
         testlist = ["OK", "ok", "Ok"]
         if test['ret_msg'] in testlist:
-            logger.info(f"{self.alias}: rest login succesfull")
+            logger.info(f"{self.alias}: rest login successful")
         else:
             logger.error(f"{self.alias}: failed to login")
             logger.error(f"{self.alias}: exiting")
@@ -246,7 +247,8 @@ class BybitDerivatives:
                                     for exchange_income in exchange_pnl["result"]['data']:
                                         orderdetail = self.rest_manager2.query_conditional_order(symbol=exchange_income['symbol'], stop_order_id=exchange_income['order_id']) #Query order_id for get close timestamp
                                         updatetime = orderdetail['result']['updated_time']
-                                        timestamp2 = int(datetime.datetime.timestamp(parser.parse(updatetime)) * 1000)
+                                        update_datetime = parser.parse(updatetime)
+                                        timestamp2 = int(datetime.datetime.timestamp(update_datetime) * 1000)
                                         if exchange_income['exec_type'] == 'Trade':
                                             income_type = 'REALIZED_PNL'
                                         else:
@@ -258,6 +260,9 @@ class BybitDerivatives:
                                                         # timestamp=exchange_income['created_at'],
                                                         timestamp=timestamp2,
                                                         transaction_id=exchange_income['order_id'])
+                                        
+                                        if self.starting_from and self.starting_from > update_datetime:
+                                            continue
                                         incomes.append(income)
                                     self.repository.process_incomes(incomes=incomes, account=self.alias)
                             time.sleep(5)  # pause to not overload the api limit
@@ -278,7 +283,8 @@ class BybitDerivatives:
                             for exchange_income in exchange_pnl["result"]['data']:
                                 orderdetail = self.rest_manager2.query_conditional_order(symbol=exchange_income['symbol'], stop_order_id=exchange_income['order_id']) #Query order_id for get close timestamp
                                 updatetime = orderdetail['result']['updated_time']
-                                timestamp2 = int(datetime.datetime.timestamp(parser.parse(updatetime)) * 1000)
+                                update_datetime = parser.parse(updatetime)
+                                timestamp2 = int(datetime.datetime.timestamp(update_datetime) * 1000)
                                 if exchange_income['exec_type'] == 'Trade':
                                     income_type = 'REALIZED_PNL'
                                 else:
@@ -290,6 +296,9 @@ class BybitDerivatives:
                                                 # timestamp=exchange_income['created_at'],
                                                 timestamp=timestamp2,
                                                 transaction_id=exchange_income['order_id'])
+                                
+                                if self.starting_from and self.starting_from > update_datetime:
+                                    continue
                                 incomes.append(income)
                             self.repository.process_incomes(incomes=incomes, account=self.alias)
                         time.sleep(5)  # pause to not overload the api limit
