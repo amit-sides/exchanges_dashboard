@@ -11,4 +11,4 @@ COPY scraper_root /scraper/scraper_root
 
 WORKDIR /scraper
 ENV PYTHONPATH "${PYTHONPATH}:/scraper"
-CMD ["python3", "scraper_root/scraper.py"]
+CMD ["python3", "-u", "scraper_root/scraper.py"]
