@@ -266,7 +266,8 @@ class BybitDerivatives:
                                         incomes.append(income)
                                     self.repository.process_incomes(incomes=incomes, account=self.alias)
                             time.sleep(5)  # pause to not overload the api limit
-                    except Exception:
+                    except Exception as e:
+                        logger.exception(f"sync_trades: {e}")
                         time.sleep(360)
                         pass
                 x += 1
@@ -302,7 +303,8 @@ class BybitDerivatives:
                                 incomes.append(income)
                             self.repository.process_incomes(incomes=incomes, account=self.alias)
                         time.sleep(5)  # pause to not overload the api limit
-                    except Exception:
+                    except Exception as e:
+                        logger.exception(f"sync_trades: {e}")
                         time.sleep(360)
                         pass
                 logger.warning(f'{self.alias}: Synced trades')
