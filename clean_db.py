@@ -100,7 +100,6 @@ def yes_or_no(question):
 def delete_records(session: sqlalchemy.orm.Session, table: type(_DECL_BASE), account: str,
                    before: datetime.date, after: datetime.date, yes_all: bool = False) -> bool:
     print("====================================================")
-    print(f"Deleting records from table '{table.__tablename__}'")
     query = session.query(table)
     date_field = ENTITY_TO_DATE_FIELD[table](table)
     if before:
@@ -114,6 +113,7 @@ def delete_records(session: sqlalchemy.orm.Session, table: type(_DECL_BASE), acc
     if records_count == 0:
         print(f"No records to delete from {table.__tablename__}.")
         return yes_all
+    print(f"Deleting {records_count} records from table '{table.__tablename__}'.")
 
     yes = yes_all
     if not yes_all:
