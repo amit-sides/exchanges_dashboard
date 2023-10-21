@@ -6,8 +6,8 @@ services:
       - CONFIG_FILE=/config/config.json
       - DATABASE_PATH=sqlite:////data/exchanges_db.sqlite
     volumes:
-      - $PWD/data:/data
-      - $PWD/config:/config
+      - ./data:/data
+      - ./config:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
   metabase-app:
@@ -17,8 +17,8 @@ services:
     hostname: metabase
     volumes:
       - /dev/urandom:/dev/random:ro
-      - $PWD:/metabase-data
-      - $PWD/data:/data
+      - ./:/metabase-data
+      - ./data:/data
     ports:
       - "3000:3000"
     environment:
