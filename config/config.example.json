@@ -1,29 +1,36 @@
-// Copy this file to config.json in the root folder   
-// supported: binance_futures, bybit_derivatives (NOTE: USDT_Perpetual only) and bitget_future (NOTE: USDT-M only)
-
 {
   "accounts": [
     {
-      "alias": "demo_binance",
-      "exchange": "binance_futures",
-      "test_net": false,
-      "api_key": "",
-      "api_secret": ""
-    },
-    {
-      "alias": "demo_bybit",
+      "alias": "Sidesub1",
       "exchange": "bybit_derivatives",
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2022-01-01"
+      "start_date": "2023-08-22T00Z"
     },
     {
-      "alias": "demo_bitget",
-      "exchange": "bitget_futures",
+      "alias": "Sidesub2",
+      "exchange": "bybit_derivatives",
+      "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "api_passphrase": ""
+      "start_date": "2023-08-22T00Z"
+    },
+    {
+      "alias": "Sidesub3",
+      "exchange": "bybit_derivatives",
+      "test_net": false,
+      "api_key": "",
+      "api_secret": "",
+      "start_date": "2023-10-20T00Z"
     }
+    // {
+    //  "alias": "Sidesub4",
+    //  "exchange": "bybit_derivatives",
+    //  "test_net": false,
+    //  "api_key": "DMSXDSYYCYHDHJFKKV",
+    //  "api_secret": "PJAXHIEOVVCREIYIWYXFNUXUKHDHXAJECOJV",
+    //  "start_date": "2023-08-22"
+    // }
   ]
 }
