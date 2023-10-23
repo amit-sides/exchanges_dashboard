@@ -8,14 +8,14 @@
       "api_secret": "",
       "start_date": "2023-08-22T00Z"
     },
-    {
-      "alias": "Sidesub2",
-      "exchange": "bybit_derivatives",
-      "test_net": false,
-      "api_key": "",
-      "api_secret": "",
-      "start_date": "2023-08-22T00Z"
-    },
+    // {
+    //   "alias": "Sidesub2",
+    //   "exchange": "bybit_derivatives",
+    //   "test_net": false,
+    //   "api_key": "",
+    //   "api_secret": "",
+    //   "start_date": "2023-08-22T00Z"
+    // },
     {
       "alias": "Sidesub3",
       "exchange": "bybit_derivatives",
