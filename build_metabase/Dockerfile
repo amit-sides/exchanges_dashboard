@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:22.04 AS local-metabase
 
 ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 
@@ -28,3 +28,11 @@ EXPOSE 3000
 
 # run it
 ENTRYPOINT ["/app/run_metabase.sh"]
+
+FROM local-metabase
+
+# Copied from https://github.com/anki-code/metabase-sql-wrapper
+RUN apk update && apk add --update py-pip && pip install xonsh==0.9.24
+ADD run.xsh /
+RUN chmod +x run.xsh
+ENTRYPOINT ["/usr/bin/xonsh", "/run.xsh"]
