@@ -32,7 +32,7 @@ ENTRYPOINT ["/app/run_metabase.sh"]
 FROM local-metabase
 
 # Copied from https://github.com/anki-code/metabase-sql-wrapper
-RUN apk update && apk add --update py-pip && pip install xonsh==0.9.24
+RUN apt install python-pip && pip install xonsh==0.9.24
 ADD run.xsh /
 RUN chmod +x run.xsh
 ENTRYPOINT ["/usr/bin/xonsh", "/run.xsh"]
