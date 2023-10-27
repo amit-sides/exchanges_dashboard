@@ -14,25 +14,21 @@ RUN apt-get update -yq && apt-get install -yq bash fonts-dejavu-core fonts-dejav
     mkdir -p /plugins && chmod a+rwx /plugins && \
     useradd --shell /bin/bash metabase
 
-
 WORKDIR /app
 
 # copy app from the official image
 COPY --from=metabase/metabase:latest /app /app
 
-RUN chown -R metabase /app
-
-USER metabase
 # expose our default runtime port
 EXPOSE 3000
 
 # run it
-ENTRYPOINT ["/app/run_metabase.sh"]
+CMD ["/app/run_metabase.sh"]
 
 FROM local-metabase
 
 # Copied from https://github.com/anki-code/metabase-sql-wrapper
-RUN apt install python-pip && pip install xonsh==0.9.24
-ADD run.xsh /
-RUN chmod +x run.xsh
-ENTRYPOINT ["/usr/bin/xonsh", "/run.xsh"]
+RUN apt-get install python3 -y
+
+ADD wrap_metabase.py /app/wrap_metabase.py
+CMD ["python3", "/app/wrap_metabase.py"]
