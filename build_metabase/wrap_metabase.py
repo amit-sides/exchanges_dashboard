@@ -34,22 +34,20 @@ def main():
     print('*** Metabase SQL wrapper [https://github.com/anki-code/metabase-sql-wrapper]')
 
     metabase_jar = '/app/metabase.jar'
-    metabase_db_path = os.getenv('MB_DB_FILE', '/data/metabase')
-    metabase_db_path = os.path.expanduser(metabase_db_path)
+    metabase_db_file = os.getenv('MB_DB_FILE', '/data/metabase.db')
+    metabase_db_file += ".mv.db"
+    metabase_db_path = os.path.dirname(metabase_db_file)
 
-    metabase_db_path_exists = os.path.exists(metabase_db_path)
-    if metabase_db_path_exists:
+    if os.path.exists(metabase_db_file):
         print(f'*** Metabase DB path: {metabase_db_path}')
     else:
         os.makedirs(metabase_db_path)
         print(f'*** Metabase DB path created: {metabase_db_path}')
 
-    metabase_db_file = os.path.join(metabase_db_path, os.path.basename(metabase_db_path))
-
     init_sql_file = os.getenv('MB_DB_INIT_SQL_FILE')
     if init_sql_file and os.path.exists(init_sql_file):
-        if metabase_db_path_exists:
-            print(f'*** Database path {metabase_db_path} exists, SKIP creating database from {init_sql_file}')
+        if os.path.exists(metabase_db_file):
+            print(f'*** Database file {metabase_db_file} exists, SKIP creating database from {init_sql_file}')
         else:
             print(f'*** Create database {metabase_db_file} from {init_sql_file}')
             subprocess.run(f'java -cp {metabase_jar} org.h2.tools.RunScript -url jdbc:h2:{metabase_db_file} -script {init_sql_file}', shell=True)
