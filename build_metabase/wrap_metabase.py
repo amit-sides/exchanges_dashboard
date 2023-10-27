@@ -63,7 +63,7 @@ def main():
     save_sql_file = os.getenv('MB_DB_SAVE_TO_SQL_FILE')
     if save_sql_file:
         print(f'*** Saving database {metabase_db_file} to {save_sql_file}')
-        subprocess.run(f'java -Dh2.maxCompactTime=15000 -cp {metabase_jar} org.h2.tools.Script -url jdbc:h2:{metabase_db_file} -script {save_sql_file}', shell=True)
+        subprocess.run(f'java -cp {metabase_jar} org.h2.tools.Script -url jdbc:h2:{metabase_db_file} -script {save_sql_file}', shell=True)
         print('*** Saving DONE')
 
 
