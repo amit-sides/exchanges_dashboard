@@ -19,6 +19,8 @@ WORKDIR /app
 # copy app from the official image
 COPY --from=metabase/metabase:latest /app /app
 
+USER metabase
+
 # expose our default runtime port
 EXPOSE 3000
 
@@ -26,9 +28,6 @@ EXPOSE 3000
 CMD ["/app/run_metabase.sh"]
 
 FROM local-metabase
-
-# Copied from https://github.com/anki-code/metabase-sql-wrapper
-RUN apt-get install python3 -y
 
 ADD wrap_metabase.py /app/wrap_metabase.py
 CMD ["python3", "/app/wrap_metabase.py"]
