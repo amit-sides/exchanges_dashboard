@@ -34,8 +34,8 @@ def main():
     print('*** Metabase SQL wrapper [https://github.com/anki-code/metabase-sql-wrapper]')
 
     metabase_jar = '/app/metabase.jar'
-    metabase_db_file = os.getenv('MB_DB_FILE', '/data/metabase.db')
-    metabase_db_file += ".mv.db"
+    metabase_db_file_h2 = os.getenv('MB_DB_FILE', '/data/metabase.db')
+    metabase_db_file = metabase_db_file_h2 + ".mv.db"
     metabase_db_path = os.path.dirname(metabase_db_file)
 
     if os.path.exists(metabase_db_file):
@@ -50,7 +50,7 @@ def main():
             print(f'*** Database file {metabase_db_file} exists, SKIP creating database from {init_sql_file}')
         else:
             print(f'*** Create database {metabase_db_file} from {init_sql_file}')
-            subprocess.run(f'java -cp {metabase_jar} org.h2.tools.RunScript -url jdbc:h2:{metabase_db_file} -script {init_sql_file}', shell=True)
+            subprocess.run(f'java -cp {metabase_jar} org.h2.tools.RunScript -url jdbc:h2:{metabase_db_file_h2} -script {init_sql_file}', shell=True)
             print('*** Creating DONE')
     else:
         print(f'*** MB_DB_INIT_SQL_FILE {init_sql_file} not found, SKIP')
@@ -61,7 +61,7 @@ def main():
     save_sql_file = os.getenv('MB_DB_SAVE_TO_SQL_FILE')
     if save_sql_file:
         print(f'*** Saving database {metabase_db_file} to {save_sql_file}')
-        subprocess.run(f'java -cp {metabase_jar} org.h2.tools.Script -url jdbc:h2:{metabase_db_file} -script {save_sql_file}', shell=True)
+        subprocess.run(f'java -cp {metabase_jar} org.h2.tools.Script -url jdbc:h2:{metabase_db_file_h2} -script {save_sql_file}', shell=True)
         print('*** Saving DONE')
 
 
