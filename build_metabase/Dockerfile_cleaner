@@ -1,0 +1,4 @@
+FROM openjdk:11
+
+RUN wget -nv https://downloads.metabase.com/v0.47.5/metabase.jar -O /tmp/metabase.jar
+CMD java -cp /tmp/metabase.jar org.h2.tools.RunScript -script /code/build_metabase/clean_metabase.sql -url jdbc:h2:/code/metabase.db/metabase.db
