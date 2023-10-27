@@ -38,7 +38,7 @@ def main():
     metabase_db_file = metabase_db_file_h2 + ".mv.db"
     metabase_db_path = os.path.dirname(metabase_db_file)
 
-    if os.path.exists(metabase_db_file):
+    if os.path.exists(metabase_db_path):
         print(f'*** Metabase DB path: {metabase_db_path}')
     else:
         os.makedirs(metabase_db_path)
