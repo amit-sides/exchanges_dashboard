@@ -11,7 +11,11 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
   metabase-app:
-    build: build_metabase
+    build:
+      context: build_metabase
+      args:
+        - "UID=${UID:-1000}"
+        - "GID=${GID:-1000}"
     container_name: metabase
     hostname: metabase
     volumes:
