@@ -47,8 +47,7 @@ if __name__ == '__main__':
         elif account.exchange == 'binance_spot':
             scraper = BinanceSpot(account=account, symbols=scraper_config.symbols, repository=repository)
         elif account.exchange == 'bybit_derivatives':
-            starting_from = parser.parse(account.start_date) if account.start_date != "" else None
-            scraper = BybitDerivatives(account=account, symbols=scraper_config.symbols, repository=repository, unified_account=account.unified, starting_from=starting_from)
+            scraper = BybitDerivatives(account=account, symbols=scraper_config.symbols, repository=repository, unified_account=account.unified)
         elif account.exchange == 'bitget_futures':
             scraper = BitgetFutures(account=account, symbols=scraper_config.symbols, repository=repository)
         else:

@@ -28,10 +28,9 @@ def is_asset_usd_or_derivative(symbol: str):
 
 
 class BybitDerivatives:
-    def __init__(self, account: Account, symbols: List[str], repository: Repository, unified_account: bool, starting_from: datetime = None, exchange: str = "bybit"):
-    def __init__(self, account: Account, symbols: List[str], repository: Repository):
+    def __init__(self, account: Account, symbols: List[str], repository: Repository, unified_account: bool, exchange: str = "bybit"):
         logger.info(f"Bybit initializing")
-        self.starting_from = starting_from
+        self.starting_from = parser.parse(account.start_date) if account.start_date != "" else datetime.datetime.fromtimestamp(0)
         self.account = account
         self.unified_account = unified_account
         self.alias = self.account.alias
@@ -273,7 +272,8 @@ class BybitDerivatives:
                                         income=float(exchange_income['closedPnl']),
                                         timestamp=int(exchange_income['createdTime']),
                                         transaction_id=exchange_income['orderId'])
-                        incomes.append(income)
+                        if income.timestamp >= self.starting_from.timestamp() * 1000:
+                            incomes.append(income)
 
                     while exchange_incomes['result']['nextPageCursor'] != '':
                         logger.info(f"{self.alias}: Retrieving orders for page cursor {exchange_incomes['result']['nextPageCursor']}'")
@@ -291,7 +291,8 @@ class BybitDerivatives:
                                             income=float(exchange_income['closedPnl']),
                                             timestamp=int(exchange_income['createdTime']),
                                             transaction_id=exchange_income['orderId'])
-                            incomes.append(income)
+                            if income.timestamp >= self.starting_from.timestamp() * 1000:
+                                incomes.append(income)
 
                         exchange_incomes = self.rest_manager2.get_closed_pnl(category="linear", limit='100', endTime=oldest_timestamp - 1,
                                                                              cursor=exchange_incomes['result']['nextPageCursor'])
@@ -329,7 +330,8 @@ class BybitDerivatives:
                                         income=float(exchange_income['closedPnl']),
                                         timestamp=int(exchange_income['createdTime']),
                                         transaction_id=exchange_income['orderId'])
-                        incomes.append(income)
+                        if income.timestamp >= self.starting_from.timestamp() * 1000:
+                            incomes.append(income)
 
                     while exchange_incomes['result']['nextPageCursor'] != '':
                         for exchange_income in exchange_incomes['result']['list']:
@@ -346,7 +348,8 @@ class BybitDerivatives:
                                             income=float(exchange_income['closedPnl']),
                                             timestamp=int(exchange_income['createdTime']),
                                             transaction_id=exchange_income['orderId'])
-                            incomes.append(income)
+                            if income.timestamp >= self.starting_from.timestamp() * 1000:
+                                incomes.append(income)
 
                         exchange_incomes = self.rest_manager2.get_closed_pnl(category="linear", limit='100', startTime=newest_timestamp + 1,
                                                                              cursor=exchange_incomes['result']['nextPageCursor'])
