@@ -138,6 +138,7 @@ class Account:
     api_secret: str = ''
     api_passphrase: str = ''
     exchange: str = ''
+    unified: bool = False
     start_date: str = ''
     test_net: bool = False
 
