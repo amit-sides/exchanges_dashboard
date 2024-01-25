@@ -39,7 +39,8 @@ if __name__ == '__main__':
         scraper_config.symbols.append('BTCUSDT')
 
     scrapers: List = []
-    repository = Repository(accounts=[account.alias for account in scraper_config.accounts])
+    repository = Repository(accounts=[account.alias for account in scraper_config.accounts],
+                        accounts_start_dates={account.alias: account.start_date for account in scraper_config.accounts})
     scraper = None
     for account in scraper_config.accounts:
         if account.exchange == 'binance_futures':

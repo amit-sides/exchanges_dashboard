@@ -5,6 +5,7 @@ import time
 from datetime import datetime, date, timedelta, timezone
 from typing import List, Dict
 
+from dateutil import parser
 from sqlalchemy import create_engine, func, Table, asc, nulls_first
 from sqlalchemy.orm import sessionmaker
 
@@ -18,13 +19,14 @@ logger = logging.getLogger(__name__)
 
 
 class Repository:
-    def __init__(self, accounts: List[str]):
+    def __init__(self, accounts: List[str], accounts_start_dates: Dict[str, str] = None):
         self.engine = create_engine(url=os.getenv(
             'DATABASE_PATH', 'sqlite:///data/exchanges_db.sqlite'), echo=False)
         _DECL_BASE.metadata.create_all(self.engine)
 
         self.lockable_session = LockableSession(self.engine)
         self.accounts: List[str] = accounts
+        self.accounts_start_dates: Dict[str, str] = accounts_start_dates
 
         update_daily_balance_thread = threading.Thread(
             name=f'sync_balance_thread', target=self.update_daily_balance, args=(accounts, ), daemon=True)
@@ -48,6 +50,9 @@ class Repository:
                             oldest_income = self.get_oldest_income(account=account)
                             if oldest_income is not None:
                                 day = oldest_income.time.date()
+                                if self.accounts_start_dates and account in self.accounts_start_dates:
+                                    start_date = parser.parse(self.accounts_start_dates[account]).date()
+                                    day = max(day, start_date)
                                 end_date = date.today()
                                 while day <= end_date:
                                     rs = con.execute(
