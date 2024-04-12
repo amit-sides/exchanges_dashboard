@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import shutil
 import sys
 import argparse
@@ -34,9 +36,10 @@ BACKUP_REGEX = "*.backup.[0-9]*"
 def parse_args():
     parser = argparse.ArgumentParser(
         prog=sys.argv[0],
-        description='Removes old records from DB')
+        description='Removes old records from DB',
+        epilog='If you get a readonly database error, try running with sudo')
     parser.add_argument("db_path", metavar="<DB Path>", type=str,
-                        help="The path to the database file.")
+                        help="The path to the database file. Example: ./data/exchanges_db.sqlite")
     parser.add_argument("account", metavar="<Account>", type=str,
                         help="The account to delete records for. Use 'all' to delete records from all accounts.")
     parser.add_argument("-b", "--before_date", dest="before", metavar="<Before Date>",
