@@ -6,7 +6,7 @@ Copied from https://github.com/anki-code/metabase-sql-wrapper
 import subprocess
 import signal
 import os
-
+import time
 
 class Process:
     def __init__(self, cmd):
@@ -56,8 +56,11 @@ def main():
         print(f'*** MB_DB_INIT_SQL_FILE {init_sql_file} not found, SKIP')
 
     p = Process('/app/run_metabase.sh')
-    p.run()
-
+    try:
+        p.run()
+    except KeyboardInterrupt:
+        time.sleep(3)  # sleep to remove db lock
+    
     save_sql_file = os.getenv('MB_DB_SAVE_TO_SQL_FILE')
     if save_sql_file:
         print(f'*** Saving database {metabase_db_file} to {save_sql_file}')
