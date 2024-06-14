@@ -111,7 +111,7 @@ class Repository:
         with self.lockable_session as session:
             logger.debug('Updating balances')
             session.query(AssetBalanceEntity).filter(AssetBalanceEntity.account == account).delete()
-            session.query(BalanceEntity).filter(BalanceEntity.account == account, BalanceEntity.registration_datetime < datetime.now() - timedelta(days=90)).delete()
+            session.query(BalanceEntity).filter(BalanceEntity.account == account, BalanceEntity.registration_datetime < datetime.now() - timedelta(days=365*3)).delete()
             session.commit()
 
             balanceEntity = BalanceEntity()
