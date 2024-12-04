@@ -59,6 +59,10 @@ services:
 
 volumes:
   sqlite-data:
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind
   postgres-data:
 
 networks:
