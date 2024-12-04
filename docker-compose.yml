@@ -1,7 +1,7 @@
 
 services:
   sqlite:
-    image: nouchka/sqlite3:latest
+    image: keinos/sqlite3:3.47.0
     container_name: sqlite3
     volumes:
       - ./sqlite_db:/sqlite-data
@@ -33,9 +33,6 @@ services:
       - ./sqlite-data:/sqlite-data
     ports:
       - "3000:3000"
-    env_file:
-      - .env
-      - .env.secrets
     environment:
       MB_DB_TYPE: postgres
       MB_DB_DBNAME: ${MB_DBNAME}
@@ -59,9 +56,6 @@ services:
     image: postgres
     container_name: postgres
     hostname: postgres
-    env_file:
-      - .env
-      - .env.secrets
     environment:
       POSTGRES_DB: ${MB_DBNAME}
       POSTGRES_USER_FILE: ${db_user}
