@@ -1,24 +1,15 @@
 
 services:
-  sqlite:
-    image: keinos/sqlite3:3.47.0
-    container_name: sqlite3
-    volumes:
-      - ./sqlite_db:/sqlite-data
-    restart: always
-
   scraper:
     build: .
     environment:
       - CONFIG_FILE=/config/config.json
       - DATABASE_PATH=sqlite:////sqlite-data/exchanges_db.sqlite
     volumes:
-      - ./sqlite-data:/sqlite-data
-      - ./config:/config
+      - sqlite-data:/sqlite-data
+      - ./config:/config:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - sqlite
 
   metabase-app:
     build:
@@ -30,7 +21,7 @@ services:
     hostname: metabase
     volumes:
       - /dev/urandom:/dev/random:ro
-      - ./sqlite-data:/sqlite-data
+      - sqlite-data:/sqlite-data
     ports:
       - "3000:3000"
     environment:
@@ -61,7 +52,7 @@ services:
       POSTGRES_USER_FILE: ${db_user}
       POSTGRES_PASSWORD_FILE: ${db_password}
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - metanet1
     restart: always
@@ -89,6 +80,10 @@ services:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     restart: always
+
+volumes:
+  sqlite-data:
+  postgres-data:
 
 networks:
   metanet1:
