@@ -33,14 +33,17 @@ services:
       - ./sqlite-data:/sqlite-data
     ports:
       - "3000:3000"
+    env_file:
+      - .env
+      - .env.secrets
     environment:
       MB_DB_TYPE: postgres
       MB_DB_DBNAME: ${MB_DBNAME}
       MB_DB_PORT: 5432
-      MB_DB_USER_FILE: /run/secrets/db_user
-      MB_DB_PASS_FILE: /run/secrets/db_password
+      MB_DB_USER_FILE: ${db_user}
+      MB_DB_PASS_FILE: ${db_password}
       MB_DB_HOST: postgres
-      MB_ENCRYPTION_SECRET_KEY: /run/secrets/mb_key
+      MB_ENCRYPTION_SECRET_KEY: ${mb_key}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metabasereports.rule=Host(`${MB_HOST}`)"
@@ -56,17 +59,17 @@ services:
     image: postgres
     container_name: postgres
     hostname: postgres
+    env_file:
+      - .env
+      - .env.secrets
     environment:
       POSTGRES_DB: ${MB_DBNAME}
-      POSTGRES_USER_FILE: /run/secrets/db_user
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_USER_FILE: ${db_user}
+      POSTGRES_PASSWORD_FILE: ${db_password}
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
     networks:
       - metanet1
-    secrets:
-      - db_password
-      - db_user
     restart: always
 
   traefik:
@@ -96,14 +99,3 @@ services:
 networks:
   metanet1:
     driver: bridge
-
-secrets:
-  db_user:
-    file: ./secrets.yaml
-    key: db_user
-  db_password:
-    file: ./secrets.yaml
-    key: db_password
-  mb_key:
-    file: ./secrets.yaml
-    key: mb_key

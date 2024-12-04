@@ -1,4 +1,4 @@
-secrets.yaml
+.env.secrets
 .idea
 
 # Byte-compiled / optimized / DLL files
