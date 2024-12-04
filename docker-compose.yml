@@ -4,15 +4,12 @@ services:
     build: .
     environment:
       - CONFIG_FILE=/config/config.json
-      - DATABASE_PATH=postgresql://${db_user}:${db_password}@postgres:5432/${MB_DBNAME}
+      - DATABASE_PATH=sqlite:////sqlite-data/exchanges_db.sqlite
     volumes:
       - ./config:/config:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    networks:
-      - metanet1
-    depends_on:
-      - postgres
+      - sqlite-data:/sqlite-data
 
   metabase-app:
     build:
@@ -24,6 +21,7 @@ services:
     hostname: metabase
     volumes:
       - /dev/urandom:/dev/random:ro
+      - sqlite-data:/sqlite-data
     ports:
       - "3000:3000"
     environment:
@@ -60,6 +58,7 @@ services:
     restart: always
 
 volumes:
+  sqlite-data:
   postgres-data:
 
 networks:
