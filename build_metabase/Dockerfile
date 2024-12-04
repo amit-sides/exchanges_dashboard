@@ -35,7 +35,7 @@ EXPOSE 3000
 # run it
 CMD ["/app/run_metabase.sh"]
 
-FROM local-metabase
-
-ADD wrap_metabase.py /app/wrap_metabase.py
-CMD ["python3", "-u", "/app/wrap_metabase.py"]
+# FROM local-metabase
+#
+# ADD wrap_metabase.py /app/wrap_metabase.py
+# CMD ["python3", "-u", "/app/wrap_metabase.py"]
