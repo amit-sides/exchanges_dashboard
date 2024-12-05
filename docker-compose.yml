@@ -64,6 +64,10 @@ volumes:
       device: ${PWD}/data
       o: bind
   postgres-data:
+    driver_opts:
+      type: none
+      device: ${PWD}/postgres-data
+      o: bind
 
 networks:
   metanet1:
