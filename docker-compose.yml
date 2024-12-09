@@ -66,7 +66,7 @@ volumes:
   postgres-data:
     driver_opts:
       type: none
-      device: ${PWD}/postgres-data
+      device: ${PWD}/postgres_data
       o: bind
 
 networks:
