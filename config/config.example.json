@@ -6,7 +6,7 @@
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2024-04-13T00Z",
+      "start_date": "2025-03-19T00Z",
       "unified": true
     },
     // {
@@ -24,7 +24,7 @@
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2024-06-01T00Z",
+      "start_date": "2025-03-19T00Z",
       "unified": true
     },
     {
@@ -33,7 +33,7 @@
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2025-02-03T00Z",
+      "start_date": "2025-03-19T00Z",
       "unified": true
     },
     {
@@ -42,7 +42,7 @@
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2024-12-02T00Z",
+      "start_date": "2025-03-19T00Z",
       "unified": true
     },
     {
@@ -51,7 +51,7 @@
       "test_net": false,
       "api_key": "",
       "api_secret": "",
-      "start_date": "2024-06-01T00Z",
+      "start_date": "2025-03-19T00Z",
       "unified": true
     }
   ]
