@@ -32,6 +32,7 @@ services:
       MB_DB_PASS: ${db_password}
       MB_DB_HOST: postgres
       MB_ENCRYPTION_SECRET_KEY: ${mb_key}
+      JAVA_OPTS: -Xmx16g
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metabasereports.rule=Host(`${MB_HOST}`)"
@@ -44,7 +45,7 @@ services:
       - scraper
 
   postgres:
-    image: postgres
+    image: postgres:17.3
     container_name: postgres
     hostname: postgres
     environment:

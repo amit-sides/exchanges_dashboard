@@ -1,11 +1,11 @@
-FROM ubuntu:22.04 AS local-metabase
+FROM ubuntu:24.04 AS local-metabase
 
 ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 ARG UID=1000
 ARG GID=1000
 
 # dependencies
-RUN apt-get update -yq && apt-get install -yq python3 bash fonts-dejavu-core fonts-dejavu-extra fontconfig curl openjdk-11-jre-headless && \
+RUN apt-get update -yq && apt-get install -yq python3 bash fonts-dejavu-core fonts-dejavu-extra fontconfig curl openjdk-21-jre-headless && \
     apt-get clean && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
     mkdir -p /app/certs && \
@@ -14,12 +14,12 @@ RUN apt-get update -yq && apt-get install -yq python3 bash fonts-dejavu-core fon
     curl https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem -o /app/certs/DigiCertGlobalRootG2.crt.pem  && \
     keytool -noprompt -import -trustcacerts -alias azure-cert -file /app/certs/DigiCertGlobalRootG2.crt.pem -keystore /etc/ssl/certs/java/cacerts -keypass changeit -storepass changeit && \
     mkdir -p /plugins && chmod a+rwx /plugins && \
-    groupadd -g ${GID} metabase && useradd --shell /bin/bash -u ${UID} -g ${GID} metabase
+    groupadd -f -g ${GID} metabase && useradd -o --shell /bin/bash -u ${UID} -g ${GID} metabase
 
 WORKDIR /app
 
 # copy app from the official image
-COPY --from=metabase/metabase:latest /app /app
+COPY --from=metabase/metabase:v0.52.11 /app /app
 RUN mkdir /metabase-data
 RUN mkdir /data
 
